@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>دایره‌های محیطی، محاطی و محاطی خارجی مثلث - هندسه ۲</title>
+<title>دایره‌های محیطی و محاطی  مثلث - هندسه ۲</title>
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -77,7 +77,6 @@ h2{margin:14px 0 8px;font-size:1.24rem;color:var(--teal);font-weight:800}
 }
 .st{font-weight:800;color:var(--pink);margin:16px 0 6px;font-size:1.05rem}
 
-/* کادرهای فرمول LTR بلوکی استاندارد */
 .f,.f2{
   direction:ltr!important;text-align:center;font-weight:700;color:var(--pink);
   margin:12px auto;padding:12px 14px;display:block;
@@ -96,7 +95,6 @@ h2{margin:14px 0 8px;font-size:1.24rem;color:var(--teal);font-weight:800}
 .r-sym{font-size:1.2em;line-height:1;margin-right:1px;font-family:system-ui,-apple-system,sans-serif;user-select:none}
 .r-body{border-top:2px solid currentColor;padding:0 3px;line-height:1.2;display:inline-block;white-space:nowrap;font-size:.95em}
 
-/* رندر دقیق و زیبای خط کسری افقی */
 .fr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 .3em;line-height:1.1}
 .fr .n{border-bottom:1.8px solid currentColor;padding:0 .35em;font-size:0.92em;text-align:center}
 .fr .dn{padding:0 .35em;font-size:0.92em;text-align:center}
@@ -113,7 +111,6 @@ h2{margin:14px 0 8px;font-size:1.24rem;color:var(--teal);font-weight:800}
   line-height:1.8;
 }
 
-/* حل قطعی مشکل شکستن یا جدا شدن O و a */
 .vsub{
   display:inline-block;
   direction:ltr!important;
@@ -134,7 +131,6 @@ h2{margin:14px 0 8px;font-size:1.24rem;color:var(--teal);font-weight:800}
 #fig .demo{margin:0;box-shadow:0 8px 16px -6px rgba(0,0,0,.15);border:1.5px solid var(--line)}
 svg{user-select:none;-webkit-user-select:none;width:100%;height:auto;display:block;direction:ltr;touch-action:none;max-height:33vh}
 
-/* حل قطعی چیده شدن عمودی کلمات داخل دکمه */
 button.go{
   display:block;
   text-align:center;
@@ -177,7 +173,6 @@ button.go:active{transform:scale(0.96)}
 .tbl th{background:rgba(11,127,128,.14);color:var(--teal);font-weight:800;white-space:nowrap}
 .badge{display:inline-block;padding:2px 8px;border-radius:6px;font-weight:700;font-size:.85rem}
 
-/* پنجره فرمول‌نامه */
 .modal-overlay{
   position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.55);
   backdrop-filter:blur(3px);z-index:900;display:none;align-items:center;justify-content:center;padding:16px;
@@ -191,7 +186,6 @@ button.go:active{transform:scale(0.96)}
 .modal-card h3{margin-top:0;color:var(--teal);display:flex;align-items:center;gap:8px;}
 .close-btn{position:absolute;top:14px;left:14px;background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--mut);}
 
-/* رنگ‌های تفکیک مساحت‌ها */
 polygon { fill: none; }
 .tf{fill:none;stroke:none}
 .tf.h1{fill:var(--blue);fill-opacity:.22;stroke:none}
@@ -222,7 +216,6 @@ text.lb{font:700 14px Vazirmatn,sans-serif;fill:var(--ink)}
 </head>
 <body>
 
-<!-- کانواس بارش گل، ستاره و جشن -->
 <canvas id="confettiCanvas" style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:9999;"></canvas>
 
 <!-- پنجره فرمول‌نامه -->
@@ -244,7 +237,7 @@ text.lb{font:700 14px Vazirmatn,sans-serif;fill:var(--ink)}
 </div>
 
 <header id="header">
-  <b>دایره‌های مثلث و محاطی خارجی (هندسه ۲)</b>
+  <b>دایره‌های محیطی و محاطی مثلث (هندسه ۲)</b>
   <span class="author">طراح: زینب صفری</span>
   <div class="dots" id="dots"></div>
   <div class="hdr-tools">
@@ -265,7 +258,6 @@ const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 const el=(t,c)=>{const e=document.createElement(t);if(c)e.className=c;return e};
 let run=0,F=null;
 
-/* کنترل سرعت ۳ حالته */
 const speedProfiles = [
   { label: '⏱ ۱x (آرام)', factor: 1 },
   { label: '⏱ ۱.۵x (متوسط)', factor: 0.6 },
@@ -277,7 +269,6 @@ $('#spdBtn').onclick = () => {
   $('#spdBtn').textContent = speedProfiles[spdIdx].label;
 };
 
-/* تغییر تم روز و شب */
 $('#themeBtn').onclick = () => {
   const cur = document.documentElement.getAttribute('data-theme');
   document.documentElement.setAttribute('data-theme', cur === 'dark' ? 'light' : 'dark');
@@ -291,7 +282,7 @@ window.addEventListener('resize', syncHeaderHeight);
 window.addEventListener('load', syncHeaderHeight);
 syncHeaderHeight();
 
-/* سیستم شادباش و بارش گل/ستاره با کانواس */
+/* کانواس بارش گل و جشن */
 const canvas = $('#confettiCanvas');
 const ctx = canvas.getContext('2d');
 let particles = [];
@@ -342,7 +333,6 @@ function updateConfetti(){
 }
 updateConfetti();
 
-/* صدای شادباش ملایم */
 function playChime(){
   try{
     const ac = new (window.AudioContext || window.webkitAudioContext)();
@@ -378,7 +368,6 @@ function ensureVisible(e, isBtn=false, force=false){
   }
 }
 
-/* پردازش دقیق ریاضی و تبدیل بدون نقص فلش نتیجه و کسرها */
 function renderMath(str){
  if(!str) return '';
  let s = str;
@@ -490,7 +479,7 @@ const S=[
 ['p','چون نقطهٔ O_a روی نیمسازهاست، فاصله‌اش از ضلع BC و امتداد اضلاع برابر r_a است. دایره بر این سه خط مماس می‌شود:','drawExCirc drawAltitudes',{drawExCirc:1,drawAltitudes:1}],
 ['btn','👇 گام چهارم: مشاهدهٔ هر ۳ دایرهٔ محاطی خارجی در اطراف مثلث'],
 ['st','گام ۴: هر مثلث دقیقاً دارای ۳ دایرهٔ محاطی خارجی است'],
-['p','با امتداد دادن تمام اضلاع مثلث، دو دایرهٔ محاطی خارجی دیگر به شعاع‌های r_b و r_c نیز تشکیل می‌شوند که هر کدام بر یک ضلع و امتداد دو ضلع دیگر کاملاً مماس هستند:','drawAllExLines drawAllExCircs',{drawAllExLines:1,drawAllExCircs:1}],
+['p','با امتداد دادن تمام اضلاع مثلث در هر ۶ جهت، دو دایرهٔ محاطی خارجی دیگر به شعاع‌های r_b و r_c نیز تشکیل می‌شوند که هر کدام بر یک ضلع و امتداد دو ضلع دیگر کاملاً مماس هستند:','drawAllExLines drawAllExCircs',{drawAllExLines:1,drawAllExCircs:1}],
 ['ex','نتیجه: هر مثلث دارای ۳ دایرهٔ محاطی خارجی در بیرون و ۱ دایرهٔ محاطی داخلی در درون خود است.'],
 ['btn','🎯 حالا نوبت منه'],
 ['quiz',{
@@ -608,7 +597,7 @@ const S=[
 `]]},
 
 {h:'۷. آزمون جامع پایانی',items:[
-['obj','🎯 ارزیابی تسلط: یادگیری خود در مبحث دایره‌های مثلث و محاطی خارجی را بسنجید.'],
+['obj','🎯 ارزیابی تسلط: یادگیری خود در مبحث دایره‌های محیطی و محاطی مثلث را بسنجید.'],
 ['quiz',{
  q:'در یک مثلث با اضلاع ۵ و ۶ و ۷، نیم‌محیط p = 9 است. اگر مساحت برابر S = 6√6 باشد، شعاع دایره محاطی خارجی نظیر ضلع ۵ چقدر است؟',
  o:['\\frac{3√6}{2}','2√6','√6'],
@@ -817,7 +806,6 @@ function mkFig(kind){
    }
   }
   else if(kind==='fig_excircle'){
-   // هندسه متقارن دقیق جهت مماس شدن قطعی دایره‌ها
    const A={x:230,y:110}, B={x:195,y:170}, C={x:265,y:170};
    const Oa={x:230,y:230}, ra=60;
    const Ta={x:230,y:170}, Tc={x:178,y:200}, Tb={x:282,y:200};
@@ -833,12 +821,13 @@ function mkFig(kind){
    }
 
    if(V('drawExt')){
-    // امتدادهای دو ضلع AB و AC
+    // امتدادهای دو ضلع AB و AC به سمت پایین
     s+=`<line class="ln-ext" x1="160" y1="230" x2="280" y2="24"/>`;
     s+=`<line class="ln-ext" x1="300" y1="230" x2="180" y2="24"/>`;
    }
 
    if(V('drawBisect')){
+    // سه نیمساز همرس در O_a
     s+=`<line pathLength="1" class="ln-bisect" x1="${A.x}" y1="${A.y}" x2="${Oa.x}" y2="${Oa.y}"/>`;
     s+=`<line pathLength="1" class="ln-bisect" x1="${B.x}" y1="${B.y}" x2="${Oa.x}" y2="${Oa.y}"/>`;
     s+=`<line pathLength="1" class="ln-bisect" x1="${C.x}" y1="${C.y}" x2="${Oa.x}" y2="${Oa.y}"/>`;
@@ -864,7 +853,7 @@ function mkFig(kind){
     s+=`<text class="lb nf" style="fill:var(--pink);font-weight:800;font-size:14px" x="252" y="218">r<tspan dy="3" font-size="10">a</tspan></text>`;
    }
 
-   // امتدادهای تمام جهات برای مماس شدن دقیق هر ۳ دایره
+   /* امتدادهای تمام جهات با تقارن دقیق برای مماس شدن هر ۳ دایره بدون هیچ خط افقی نامربوط */
    if(V('drawAllExLines')){
     s+=`<line class="ln-ext" x1="100" y1="170" x2="360" y2="170"/>`;
     s+=`<line class="ln-ext" x1="160" y1="230" x2="280" y2="24"/>`;
@@ -872,8 +861,8 @@ function mkFig(kind){
    }
 
    if(V('drawAllExCircs')){
-    const Oc={x:161,y:110}, rc=60;
-    const Ob={x:299,y:110}, rb=60;
+    const Oc={x:161,y:110}, rc=60; // دایره سمت چپ مماس بر امتدادها
+    const Ob={x:299,y:110}, rb=60; // دایره سمت راست مماس بر امتدادها
     s+=`<circle pathLength="1" class="cir-pink" cx="${Oc.x}" cy="${Oc.y}" r="${rc}"/>`;
     s+=`<text class="lb nf" style="fill:var(--pink);font-weight:bold;text-anchor:middle" x="${Oc.x}" y="${Oc.y+5}">r<tspan dy="3" font-size="10">c</tspan></text>`;
     s+=`<circle pathLength="1" class="cir-pink" cx="${Ob.x}" cy="${Ob.y}" r="${rb}"/>`;
