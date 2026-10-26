@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>دایره‌های محیطی، محاطی و محاطی خارجی مثلث - هندسه ۲</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f2f8f7;--ink:#12303a;--teal:#0b7f80;--blue:#2563eb;--pink:#d1346f;
+  --am:#c98500;--card:#fff;--line:#cfe3e0;--ok:#1b8f5a;--mut:#6a858c;--pur:#8e63f2;
+  --hdr-h:65px;
+  box-sizing:border-box;
+}
+:root[data-theme="dark"]{
+  --bg:#0e1b1f;--ink:#e3f1ef;--teal:#37c4be;--blue:#60a5fa;--pink:#ff7aa8;
+  --am:#ffc247;--card:#16282d;--line:#27424a;--ok:#4fd592;--mut:#97b3b8;--pur:#c084fc;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;font-family:Vazirmatn,Tahoma,sans-serif;background:var(--bg);color:var(--ink);
+  line-height:2.2;
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:28px 28px;
+}
+header{
+  background:linear-gradient(135deg,var(--teal),var(--blue));color:#fff;
+  padding:10px 14px;display:flex;align-items:center;justify-content:space-between;
+  gap:8px;flex-wrap:wrap;position:sticky;top:0;z-index:30;box-shadow:0 2px 10px rgba(0,0,0,.15);
+}
+header b{font-size:0.98rem;font-weight:800}
+.author{font-size:.8rem;font-weight:600;background:rgba(255,255,255,.2);padding:2px 8px;border-radius:8px}
+.hdr-tools{display:flex;align-items:center;gap:6px;}
+.dots{display:flex;gap:5px;flex-wrap:wrap}
+.dots button{
+  width:26px;height:26px;border-radius:50%;border:2px solid #fff;background:transparent;
+  color:#fff;font:inherit;font-size:.78rem;cursor:pointer;line-height:1;transition:.2s;
+}
+.dots button.on{background:#fff;color:var(--teal);font-weight:800;transform:scale(1.1)}
+
+.spd-btn, .tool-btn{
+  border:0;background:rgba(255,255,255,.24);color:#fff;border-radius:8px;
+  padding:4px 10px;font:inherit;cursor:pointer;font-size:.8rem;font-weight:700;
+  display:inline-flex;align-items:center;gap:4px;transition:.2s;
+}
+.spd-btn:active, .tool-btn:active{background:rgba(255,255,255,.4)}
+
+main{max-width:780px;margin:0 auto;padding:0 14px 160px}
+#fig{
+  position:sticky;top:var(--hdr-h, 65px);z-index:20;padding:6px 0 10px;background:var(--bg);
+}
+#fig:empty{display:none}
+
+h2{margin:14px 0 8px;font-size:1.24rem;color:var(--teal);font-weight:800}
+
+.typing::after{
+  content:" ▍";
+  color:var(--pink);
+  font-weight:300;
+  animation:bl 0.8s steps(2) infinite;
+}
+@keyframes bl{50%{opacity:0}}
+
+.p,.ex{margin:10px 0;font-size:1rem}
+.obj{
+  border:2px solid var(--blue);border-right:6px solid var(--blue);border-radius:12px;
+  background:var(--card);padding:12px 16px;margin:12px 0;font-weight:600;color:var(--blue);
+  line-height:2.2;box-shadow:0 4px 12px rgba(37,99,235,.06);font-size:0.98rem;
+}
+.d{
+  border:2px solid var(--teal);border-radius:12px;background:var(--card);
+  padding:12px 16px;margin:14px 0;font-weight:600;line-height:2.2;
+}
+.ex{
+  border-right:4px solid var(--pink);padding:10px 16px;background:var(--card);
+  border-radius:8px;line-height:2.2;margin:12px 0;
+}
+.st{font-weight:800;color:var(--pink);margin:16px 0 6px;font-size:1.05rem}
+
+/* کادرهای فرمول LTR بلوکی استاندارد */
+.f,.f2{
+  direction:ltr!important;text-align:center;font-weight:700;color:var(--pink);
+  margin:12px auto;padding:12px 14px;display:block;
+  line-height:2.3;background:rgba(209,52,111,.05);border-radius:10px;
+  border:1px dashed rgba(209,52,111,.28);unicode-bidi:isolate;
+}
+.f{font-size:1.22rem;min-height:2.4em}
+.f2{font-size:1.12rem}
+
+.math-tag{
+  direction:ltr!important;font-family:inherit;font-weight:700;white-space:nowrap;
+  display:inline-block;color:var(--pink);
+  background:rgba(209,52,111,.06);padding:3px 10px;border-radius:6px;border:1px dashed rgba(209,52,111,.25);font-size:1rem;
+}
+.rad{display:inline-flex;align-items:baseline;direction:ltr;unicode-bidi:isolate;white-space:nowrap;margin:0 2px}
+.r-sym{font-size:1.2em;line-height:1;margin-right:1px;font-family:system-ui,-apple-system,sans-serif;user-select:none}
+.r-body{border-top:2px solid currentColor;padding:0 3px;line-height:1.2;display:inline-block;white-space:nowrap;font-size:.95em}
+
+/* رندر دقیق و زیبای خط کسری افقی */
+.fr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 .3em;line-height:1.1}
+.fr .n{border-bottom:1.8px solid currentColor;padding:0 .35em;font-size:0.92em;text-align:center}
+.fr .dn{padding:0 .35em;font-size:0.92em;text-align:center}
+
+.badge-item{
+  display:inline-block;
+  background:rgba(11,127,128,0.14);
+  color:var(--teal);
+  padding:1px 10px;
+  border-radius:8px;
+  font-weight:800;
+  margin:0 3px;
+  border:1.5px solid rgba(11,127,128,0.35);
+  line-height:1.8;
+}
+
+/* حل قطعی مشکل شکستن یا جدا شدن O و a */
+.vsub{
+  display:inline-block;
+  direction:ltr!important;
+  unicode-bidi:isolate;
+  white-space:nowrap!important;
+}
+.vsub sub{
+  font-size:0.7em;
+  line-height:0;
+  position:relative;
+  bottom:-0.24em;
+  margin-left:-2px;
+  margin-right:1px;
+  font-weight:800;
+}
+
+.demo,.quiz{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:8px;margin:10px 0}
+#fig .demo{margin:0;box-shadow:0 8px 16px -6px rgba(0,0,0,.15);border:1.5px solid var(--line)}
+svg{user-select:none;-webkit-user-select:none;width:100%;height:auto;display:block;direction:ltr;touch-action:none;max-height:33vh}
+
+/* حل قطعی چیده شدن عمودی کلمات داخل دکمه */
+button.go{
+  display:block;
+  text-align:center;
+  line-height:1.8;
+  white-space:normal;
+  max-width:92%;
+  margin:18px auto;
+  padding:12px 20px;
+  font:inherit;
+  font-weight:700;
+  font-size:0.98rem;
+  color:#fff;
+  background:linear-gradient(135deg,var(--pink),#e11d48);
+  border:none;
+  border-radius:14px;
+  cursor:pointer;
+  box-shadow:0 4px 18px rgba(209,52,111,.38);
+  animation:btnPulse 2.2s infinite ease-in-out;
+  transition:transform .15s ease;
+}
+button.go:active{transform:scale(0.96)}
+@keyframes btnPulse{
+  0%,100%{box-shadow:0 4px 16px rgba(209,52,111,.35);transform:scale(1)}
+  50%{box-shadow:0 6px 22px rgba(209,52,111,.55);transform:scale(1.025)}
+}
+
+.opts{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.opt{
+  min-width:90px;font-weight:600;padding:6px 16px;border-radius:10px;
+  border:2px solid var(--teal);background:transparent;color:var(--ink);cursor:pointer;
+}
+.opt.ok{background:var(--ok);border-color:var(--ok);color:#fff}
+.opt.no{border-color:var(--pink);color:var(--pink)}
+.fb{min-height:1.8em;color:var(--mut);font-weight:600;margin-top:4px}
+
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:14px 0;border-radius:12px;border:1px solid var(--line);background:var(--card)}
+.tbl-hint{font-size:.78rem;color:var(--mut);text-align:center;padding:6px;background:rgba(11,127,128,.05);border-bottom:1px solid var(--line)}
+.tbl{width:100%;min-width:520px;border-collapse:collapse}
+.tbl th,.tbl td{border:1px solid var(--line);padding:10px 12px;text-align:center;font-size:.9rem;vertical-align:middle}
+.tbl th{background:rgba(11,127,128,.14);color:var(--teal);font-weight:800;white-space:nowrap}
+.badge{display:inline-block;padding:2px 8px;border-radius:6px;font-weight:700;font-size:.85rem}
+
+/* پنجره فرمول‌نامه */
+.modal-overlay{
+  position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.55);
+  backdrop-filter:blur(3px);z-index:900;display:none;align-items:center;justify-content:center;padding:16px;
+}
+.modal-overlay.open{display:flex;}
+.modal-card{
+  background:var(--card);border-radius:18px;max-width:520px;width:100%;padding:20px 24px;
+  box-shadow:0 12px 36px rgba(0,0,0,0.3);position:relative;border:2px solid var(--teal);animation:popIn 0.3s ease;
+}
+@keyframes popIn{from{transform:scale(0.85);opacity:0}to{transform:scale(1);opacity:1}}
+.modal-card h3{margin-top:0;color:var(--teal);display:flex;align-items:center;gap:8px;}
+.close-btn{position:absolute;top:14px;left:14px;background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--mut);}
+
+/* رنگ‌های تفکیک مساحت‌ها */
+polygon { fill: none; }
+.tf{fill:none;stroke:none}
+.tf.h1{fill:var(--blue);fill-opacity:.22;stroke:none}
+.tf.h2{fill:var(--pink);fill-opacity:.22;stroke:none}
+.tf.h3{fill:var(--teal);fill-opacity:.26;stroke:none}
+
+circle.cir-blue{fill:none;stroke:var(--blue);stroke-width:2.4}
+circle.cir-teal{fill:none;stroke:var(--teal);stroke-width:2.4}
+circle.cir-pink{fill:none;stroke:var(--pink);stroke-width:2.4}
+.ln-blue{stroke:var(--blue);stroke-width:2}
+.ln{stroke:var(--ink);stroke-width:2.5;fill:none}
+.ln-help{stroke:var(--pink);stroke-width:2;stroke-dasharray:5 4}
+.ln-ext{stroke:var(--mut);stroke-width:1.8;stroke-dasharray:5 4}
+.ln-bisect{stroke:var(--am);stroke-width:2.2;stroke-dasharray:6 4}
+.pt{fill:var(--card);stroke:var(--ink);stroke-width:2}
+.pt-blue{fill:var(--blue);stroke:#fff;stroke-width:2}
+.pt-pur{fill:var(--pur);stroke:#fff;stroke-width:2}
+.pt-tan{fill:var(--am);stroke:var(--ink);stroke-width:1.8}
+.sq{fill:none;stroke:var(--pink);stroke-width:1.8}
+text.lb{font:700 14px Vazirmatn,sans-serif;fill:var(--ink)}
+
+.nw{stroke-dasharray:1;stroke-dashoffset:1;animation:dr 1.2s ease forwards}
+@keyframes dr{to{stroke-dashoffset:0}}
+.nf{animation:fi 0.7s}
+@keyframes fi{from{opacity:0}}
+@media (prefers-reduced-motion:reduce){.typing::after,.nw,.nf{animation:none}}
+</style>
+</head>
+<body>
+
+<!-- کانواس بارش گل، ستاره و جشن -->
+<canvas id="confettiCanvas" style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:9999;"></canvas>
+
+<!-- پنجره فرمول‌نامه -->
+<div id="cheatModal" class="modal-overlay">
+  <div class="modal-card">
+    <button class="close-btn" onclick="$('#cheatModal').classList.remove('open')">✕</button>
+    <h3>📋 جعبه‌ابزار فرمول‌های طلایی درس</h3>
+    <p><b>۱. دایرهٔ محیطی:</b> <span class="math-tag">OA = OB = OC = R</span> (همرسی عمودمنصف‌ها)</p>
+    <p><b>۲. دایرهٔ محاطی داخلی:</b> <span class="math-tag">r = <span class="fr"><span class="n">S</span><span class="dn">p</span></span></span> (همرسی نیمسازهای داخلی)</p>
+    <p><b>۳. دایره‌های محاطی خارجی:</b><br style="margin:4px 0;">
+      <span class="math-tag"><span class="vsub">r<sub>a</sub></span> = <span class="fr"><span class="n">S</span><span class="dn">p − a</span></span></span> &nbsp;
+      <span class="math-tag"><span class="vsub">r<sub>b</sub></span> = <span class="fr"><span class="n">S</span><span class="dn">p − b</span></span></span> &nbsp;
+      <span class="math-tag"><span class="vsub">r<sub>c</sub></span> = <span class="fr"><span class="n">S</span><span class="dn">p − c</span></span></span>
+    </p>
+    <p><b>۴. رابطهٔ معکوس شعاع‌ها:</b><br style="margin:4px 0;">
+      <span class="math-tag"><span class="fr"><span class="n">1</span><span class="dn"><span class="vsub">r<sub>a</sub></span></span></span> + <span class="fr"><span class="n">1</span><span class="dn"><span class="vsub">r<sub>b</sub></span></span></span> + <span class="fr"><span class="n">1</span><span class="dn"><span class="vsub">r<sub>c</sub></span></span></span> = <span class="fr"><span class="n">1</span><span class="dn">r</span></span></span>
+    </p>
+  </div>
+</div>
+
+<header id="header">
+  <b>دایره‌های مثلث و محاطی خارجی (هندسه ۲)</b>
+  <span class="author">طراح: زینب صفری</span>
+  <div class="dots" id="dots"></div>
+  <div class="hdr-tools">
+    <button class="tool-btn" onclick="$('#cheatModal').classList.add('open')">📋 فرمول‌نامه</button>
+    <button class="spd-btn" id="spdBtn">⏱ ۱x (آرام)</button>
+    <button class="tool-btn" id="themeBtn" title="تغییر تم">🌓</button>
+  </div>
+</header>
+
+<main>
+  <div id="fig"></div>
+  <div id="txt"></div>
+</main>
+
+<script>
+const NS='http://www.w3.org/2000/svg',$=s=>document.querySelector(s);
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const el=(t,c)=>{const e=document.createElement(t);if(c)e.className=c;return e};
+let run=0,F=null;
+
+/* کنترل سرعت ۳ حالته */
+const speedProfiles = [
+  { label: '⏱ ۱x (آرام)', factor: 1 },
+  { label: '⏱ ۱.۵x (متوسط)', factor: 0.6 },
+  { label: '⏱ ۲x (سریع)', factor: 0.3 }
+];
+let spdIdx = 0;
+$('#spdBtn').onclick = () => {
+  spdIdx = (spdIdx + 1) % speedProfiles.length;
+  $('#spdBtn').textContent = speedProfiles[spdIdx].label;
+};
+
+/* تغییر تم روز و شب */
+$('#themeBtn').onclick = () => {
+  const cur = document.documentElement.getAttribute('data-theme');
+  document.documentElement.setAttribute('data-theme', cur === 'dark' ? 'light' : 'dark');
+};
+
+function syncHeaderHeight(){
+  const h=$('#header').offsetHeight;
+  document.documentElement.style.setProperty('--hdr-h', h + 'px');
+}
+window.addEventListener('resize', syncHeaderHeight);
+window.addEventListener('load', syncHeaderHeight);
+syncHeaderHeight();
+
+/* سیستم شادباش و بارش گل/ستاره با کانواس */
+const canvas = $('#confettiCanvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+
+function resizeCanvas(){
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+function launchShower(type = 'flower'){
+  const emojis = type === 'flower' ? ['🌸','🌺','🌼','🌷'] : ['🎉','⭐','✨','👏','🥳'];
+  for(let i=0; i<30; i++){
+    particles.push({
+      x: Math.random() * canvas.width,
+      y: -20,
+      char: emojis[Math.floor(Math.random() * emojis.length)],
+      size: Math.random() * 16 + 18,
+      vx: (Math.random() - 0.5) * 3,
+      vy: Math.random() * 3 + 2.5,
+      rot: Math.random() * 360,
+      vRot: (Math.random() - 0.5) * 4,
+      alpha: 1
+    });
+  }
+}
+
+function updateConfetti(){
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  for(let i = particles.length - 1; i >= 0; i--){
+    const p = particles[i];
+    p.x += p.vx;
+    p.y += p.vy;
+    p.rot += p.vRot;
+    p.alpha -= 0.009;
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    ctx.rotate(p.rot * Math.PI / 180);
+    ctx.globalAlpha = Math.max(0, p.alpha);
+    ctx.font = p.size + 'px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(p.char, 0, 0);
+    ctx.restore();
+    if(p.alpha <= 0 || p.y > canvas.height + 30) particles.splice(i, 1);
+  }
+  requestAnimationFrame(updateConfetti);
+}
+updateConfetti();
+
+/* صدای شادباش ملایم */
+function playChime(){
+  try{
+    const ac = new (window.AudioContext || window.webkitAudioContext)();
+    const freqs = [523.25, 659.25, 783.99, 1046.50];
+    freqs.forEach((f, i) => {
+      const osc = ac.createOscillator();
+      const g = ac.createGain();
+      osc.type = 'triangle';
+      osc.frequency.value = f;
+      g.gain.setValueAtTime(0.12, ac.currentTime + i * 0.09);
+      g.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + i * 0.09 + 0.35);
+      osc.connect(g);
+      g.connect(ac.destination);
+      osc.start(ac.currentTime + i * 0.09);
+      osc.stop(ac.currentTime + i * 0.09 + 0.4);
+    });
+  }catch(e){}
+}
+
+let lastScroll=0;
+function ensureVisible(e, isBtn=false, force=false){
+  const now=Date.now();
+  if(!force && now-lastScroll < 180) return;
+  lastScroll=now;
+  if(!e) return;
+  const r=e.getBoundingClientRect();
+  const bottomMargin = isBtn ? 140 : 95;
+  if(r.bottom > window.innerHeight - bottomMargin){
+    window.scrollBy({
+      top: r.bottom - window.innerHeight + bottomMargin,
+      behavior: 'smooth'
+    });
+  }
+}
+
+/* پردازش دقیق ریاضی و تبدیل بدون نقص فلش نتیجه و کسرها */
+function renderMath(str){
+ if(!str) return '';
+ let s = str;
+ s = s.replace(/\\\\/g, '<br style="margin:6px 0;">');
+ s = s.replace(/\\implies/g, ' ⟹ ');
+ s = s.replace(/\\qquad/g, '&emsp;&emsp;');
+ s = s.replace(/\\quad/g, '&emsp;');
+ s = s.replace(/\\?frac\{([^}]+)\}\{([^}]+)\}/g, '<span class="fr"><span class="n">$1</span><span class="dn">$2</span></span>');
+ s = s.replace(/√\(([^)]+)\)/g, '<span class="rad"><span class="r-sym">√</span><span class="r-body">$1</span></span>');
+ s = s.replace(/\\sqrt\{([^}]+)\}/g, '<span class="rad"><span class="r-sym">√</span><span class="r-body">$1</span></span>');
+ s = s.replace(/√([0-9a-zA-Z\u200E′]+)/g, '<span class="rad"><span class="r-sym">√</span><span class="r-body">$1</span></span>');
+ s = s.replace(/O_([abc])/g, '<span class="vsub">O<sub>$1</sub></span>');
+ s = s.replace(/r_([abc])/g, '<span class="vsub">r<sub>$1</sub></span>');
+ s = s.replace(/\[([^\]]+)\]/g, '<span class="badge-item">$1</span>');
+ return s;
+}
+
+async function typeWords(e, txt, tok){
+  e.classList.add('typing');
+  const words = txt.split(' ');
+  let accumulated = '';
+  for(let i=0; i<words.length; i++){
+    if(tok !== run) return;
+    const w = words[i];
+    accumulated += (i === 0 ? '' : ' ') + w;
+    e.innerHTML = renderMath(accumulated);
+    ensureVisible(e);
+    
+    const factor = speedProfiles[spdIdx].factor;
+    let delay = 260 * factor;
+    if(/[.؛!\n]$/.test(w)) delay += 600 * factor;
+    else if(/[,،:]$/.test(w)) delay += 280 * factor;
+    await sleep(delay);
+  }
+  e.classList.remove('typing');
+  ensureVisible(e, false, true);
+}
+
+async function typeFormula(e, str, tok){
+  e.classList.add('typing');
+  e.innerHTML = renderMath(str);
+  ensureVisible(e, false, true);
+  const factor = speedProfiles[spdIdx].factor;
+  await sleep(600 * factor);
+  e.classList.remove('typing');
+}
+
+const S=[
+{k:'fig_circum_proof',h:'۱. دایرهٔ محیطی مثلث و اثبات همرسی عمودمنصف‌ها',items:[
+['obj','🎯 هدف این بخش: می‌خواهیم بدانیم مرکز دایره‌ای که از هر سه رأس مثلث می‌گذرد کجاست؟ در این بخش با رسم عمودمنصف‌ها اثبات می‌کنیم که این مرکز، دقیقاً محل برخورد عمودمنصف‌های اضلاع است.'],
+['d','قضیه دایرهٔ محیطی مثلث: در هر مثلث، عمودمنصف‌های هر سه ضلع در یک نقطه (مرکز دایرهٔ محیطی O) همرس هستند و دایره از هر سه رأس A و B و C عبور می‌کند.'],
+['st','گام ۱: رسم مثلث و عمودمنصف‌های دو ضلع AB و BC'],
+['p','مثلث دلخواه ABC را در نظر بگیرید. ابتدا عمودمنصف ضلع AB و عمودمنصف ضلع BC را رسم می‌کنیم که در نقطهٔ O متقاطع می‌شوند:','drawTri drawMedAB drawMedBC pO',{drawTri:1,drawMedAB:1,drawMedBC:1,pO:1}],
+['btn','👇 گام دوم: بررسی فاصلهٔ نقطهٔ تقاطع O از رأس‌ها'],
+['st','گام ۲: ویژگی عمودمنصف و تساوی فاصله‌ها'],
+['p','طبق ویژگی عمودمنصف، هر نقطه روی عمودمنصف از دو سر پاره‌خط به یک فاصله است. چون O روی عمودمنصف AB است، پس OA = OB. همچنین چون O روی عمودمنصف BC است، پس OB = OC:','drawRadiiO',{drawRadiiO:1}],
+['f2','OA = OB   ,   OB = OC   ⟹   OA = OC'],
+['btn','👇 گام سوم: اثبات همرسی عمودمنصف سوم و رسم دایره'],
+['st','گام ۳: چرا عمودمنصف ضلع سوم (AC) هم دقیقاً از O می‌گذرد؟'],
+['p','چون OA = OC است، پس نقطهٔ O از دو سر پاره‌خط AC نیز فاصلهٔ برابر دارد؛ بنابراین نقطهٔ O خودبه‌خود روی عمودمنصف ضلع سوم هم قرار دارد!','drawMedAC',{drawMedAC:1}],
+['p','در نتیجه هر سه عمودمنصف در نقطهٔ O همرس هستند و دایره‌ای به مرکز O و شعاع R = OA از هر سه رأس می‌گذرد:','drawCircum',{drawCircum:1}],
+['f','OA = OB = OC = R'],
+['btn','🎯 حالا نوبت منه'],
+['quiz',{
+ q:'اگر در یک مثلث، فاصلهٔ نقطهٔ همرسی عمودمنصف‌ها تا رأس A برابر با ۹ سانتی‌متر باشد، فاصلهٔ این نقطه تا رأس C چقدر است؟',
+ o:['۴.۵ سانتی‌متر','۹ سانتی‌متر','۱۸ سانتی‌متر'],
+ a:1,
+ h:'مرکز دایرهٔ محیطی از تمام رأس‌های مثلث فاصلهٔ برابر دارد.',
+ e:'آفرین! چون OA = OB = OC = R است، فاصله تا رأس C نیز دقیقاً برابر با ۹ سانتی‌متر است.'
+}]]},
+
+{k:'fig_in_proof',h:'۲. دایرهٔ محاطی داخلی مثلث و اثبات فرمول مساحت',items:[
+['obj','🎯 هدف این بخش: اثبات همرسی نیمسازهای داخلی در نقطهٔ I، مماس شدن دقیق دایره بر هر سه ضلع و کشف این‌که فرمول مساحت S = r · p از کجا آمده است.'],
+['d','قضیه دایرهٔ محاطی داخلی: در هر مثلث، نیمسازهای هر سه زاویهٔ داخلی در یک نقطه (مرکز I) همرس هستند و دایره بر هر سه ضلع مماس است.'],
+['st','گام ۱: تقاطع نیمسازهای دو زاویهٔ B و C'],
+['p','در مثلث ABC، نیمساز زاویهٔ B و نیمساز زاویهٔ C را رسم می‌کنیم تا در نقطه‌ای مانند I یکدیگر را قطع کنند:','drawTri drawBisB drawBisC pI',{drawTri:1,drawBisB:1,drawBisC:1,pI:1}],
+['btn','👇 گام دوم: تساوی فاصلهٔ نقطهٔ I از اضلاع و همرسی نیمساز سوم'],
+['st','گام ۲: فاصلهٔ مساوی از اضلاع مثلث'],
+['p','طبق ویژگی نیمساز، هر نقطه روی نیمساز از دو ضلع زاویه فاصلهٔ برابر دارد. چون I روی نیمساز B است، فاصله‌اش از AB و BC برابر است؛ و چون روی نیمساز C است، فاصله‌اش از BC و AC نیز برابر است.'],
+['p','بنابراین فاصلهٔ نقطهٔ I از هر سه ضلع برابر شعاع r است؛ پس I روی نیمساز زاویهٔ A نیز قرار دارد:','drawBisA drawRadiiI',{drawBisA:1,drawRadiiI:1}],
+['btn','👇 گام سوم: رسم دایرهٔ محاطی مماس بر هر سه ضلع'],
+['st','گام ۳: رسم دایره به مرکز I و شعاع r'],
+['p','دایره‌ای به مرکز I و شعاع r رسم می‌کنیم که دقیقاً بر هر سه ضلع مماس می‌شود:','drawInCirc',{drawInCirc:1}],
+['btn','👇 منشأ فرمول مساحت S = r · p از کجاست؟'],
+['st','اثبات هندسی فرمول مساحت:'],
+['p','نقطهٔ I را به سه رأس وصل می‌کنیم. مثلث اصلی به سه مثلث با ارتفاع مشترک r و قاعده‌های a و b و c تقسیم می‌شود:','drawSubTri',{drawSubTri:1}],
+['f2','S = \\frac{1}{2}a·r + \\frac{1}{2}b·r + \\frac{1}{2}c·r'],
+['f2','S = r · \\frac{a + b + c}{2} = r · p'],
+['f','r = \\frac{S}{p}'],
+['btn','🎯 حالا نوبت منه'],
+['quiz',{
+ q:'در یک مثلث با مساحت ۳۶ و محیط ۲۴، شعاع دایرهٔ محاطی داخلی (r) چقدر است؟',
+ o:['r = 1.5','r = 3','r = 6'],
+ a:1,
+ h:'ابتدا نیم‌محیط p را بیابید (نصف محیط ۲۴ می‌شود ۱۲)، سپس مساحت ۳۶ را بر ۱۲ تقسیم کنید.',
+ e:'نیم‌محیط p = \\frac{24}{2} = 12 است؛ بنابراین شعاع دایره r = \\frac{36}{12} = 3 به دست می‌آید.'
+}]]},
+
+{k:'fig_excircle',h:'۳. مفهوم دایرهٔ محاطی خارجی نظیر رأس A',items:[
+['obj','🎯 هدف این بخش: آشنایی با دایره‌های محاطی خارجی در بیرون از مثلث و مشاهدهٔ رسم دقیق هندسی آن‌ها بر روی اضلاع و امتدادها.'],
+['d','تعریف دایرهٔ محاطی خارجی: دایره‌ای که در بیرون مثلث بر یک ضلع و بر امتداد دو ضلع دیگر مماس باشد، دایرهٔ محاطی خارجی نام دارد.'],
+['st','گام ۱: امتداد دادن اضلاع AB و AC'],
+['p','مثلث ABC را در نظر بگیرید. دو ضلع AB و AC را از سمت رأس‌های B و C به سمت بیرون امتداد می‌دهیم:','drawTri drawExt',{drawTri:1,drawExt:1}],
+['btn','👇 گام دوم: رسم سه نیمساز همرس در نقطهٔ O_a'],
+['st','گام ۲: تقاطع نیمساز داخلی A و نیمسازهای خارجی B و C'],
+['p','نیمساز زاویهٔ داخلی A و نیمسازهای دو زاویهٔ خارجی B و C را رسم می‌کنیم. این سه نیمساز در نقطهٔ O_a همرس می‌شوند:','drawBisect pOa',{drawBisect:1,pOa:1}],
+['btn','👇 گام سوم: رسم دایرهٔ محاطی خارجی (r_a)'],
+['st','گام ۳: رسم دایره مماس بر سه خط'],
+['p','چون نقطهٔ O_a روی نیمسازهاست، فاصله‌اش از ضلع BC و امتداد اضلاع برابر r_a است. دایره بر این سه خط مماس می‌شود:','drawExCirc drawAltitudes',{drawExCirc:1,drawAltitudes:1}],
+['btn','👇 گام چهارم: مشاهدهٔ هر ۳ دایرهٔ محاطی خارجی در اطراف مثلث'],
+['st','گام ۴: هر مثلث دقیقاً دارای ۳ دایرهٔ محاطی خارجی است'],
+['p','با امتداد دادن تمام اضلاع مثلث، دو دایرهٔ محاطی خارجی دیگر به شعاع‌های r_b و r_c نیز تشکیل می‌شوند که هر کدام بر یک ضلع و امتداد دو ضلع دیگر کاملاً مماس هستند:','drawAllExLines drawAllExCircs',{drawAllExLines:1,drawAllExCircs:1}],
+['ex','نتیجه: هر مثلث دارای ۳ دایرهٔ محاطی خارجی در بیرون و ۱ دایرهٔ محاطی داخلی در درون خود است.'],
+['btn','🎯 حالا نوبت منه'],
+['quiz',{
+ q:'مرکز دایرهٔ محاطی خارجی نظیر رأس A محل برخورد کدام خطوط است؟',
+ o:['محل برخورد عمودمنصف‌های اضلاع مثلث','محل برخورد نیمساز داخلی A و نیمسازهای خارجی B و C','محل برخورد ارتفاع‌های مثلث'],
+ a:1,
+ h:'دایره بر ضلع BC و امتداد اضلاع زاویهٔ A مماس است.',
+ e:'درست است! مرکز O_a محل همرسی نیمساز داخلی رأس A و نیمسازهای خارجی دو رأس دیگر است.'
+}]]},
+
+{k:'fig_excircle',h:'۴. اثبات هندسی و گویای فرمول شعاع محاطی خارجی',items:[
+['obj','🎯 هدف این بخش: اثبات دقیق و شهودی فرمول r_a = \\frac{S}{p - a} با تفکیک مساحت‌ها در مثلث اصلی.'],
+['d','قضیه شعاع دایره‌های محاطی خارجی: در هر مثلث، شعاع‌های دایره‌های محاطی خارجی از روابط زیر به دست می‌آیند:'],
+['f','r_a = \\frac{S}{p - a} \\qquad , \\qquad r_b = \\frac{S}{p - b} \\qquad , \\qquad r_c = \\frac{S}{p - c}'],
+['p','در شکل بالا، مثلث اصلی ABC با مرز تیره، دایرهٔ مماس خارجی به مرکز O_a، امتدادها و اندازه‌ها مشخص‌اند:','drawTri drawExt drawExCirc drawAltitudes pOa',{drawTri:1,drawExt:1,drawExCirc:1,drawAltitudes:1,pOa:1}],
+['btn','👇 گام اول اثبات: تفکیک مساحت مثلث اصلی با مثلث‌های متصل به مرکز O'],
+['st','گام ۱: رابطهٔ تفکیک مساحت‌ها'],
+['p','مرکز دایره (نقطهٔ O) را به سه رأس A و B و C وصل می‌کنیم. مثلث‌های تفکیک‌شده رنگ‌آمیزی می‌شوند: مساحت مثلث اصلی ABC از جمع دو مثلث بزرگ و کم کردن مثلث زیرین حاصل می‌شود:','drawProofTri',{drawProofTri:1}],
+['f2','S(ABC) = S(OAC) + S(OAB) \\\\ − S(OBC)'],
+['btn','👇 گام دوم اثبات: قرار دادن مساحت‌ها برحسب قاعده و ارتفاع'],
+['st','گام ۲: ارتفاع هر سه مثلث برابر شعاع r_a است'],
+['p','شعاع در نقاط تماس بر اضلاع عمود است؛ پس ارتفاع هر سه مثلث برابر با r_a است:'],
+['f2','S = \\frac{1}{2}b·r_a + \\frac{1}{2}c·r_a − \\frac{1}{2}a·r_a'],
+['btn','👇 گام سوم اثبات: فاکتورگیری و رسیدن به فرمول طلایی'],
+['st','گام ۳: فاکتورگیری جبری و اعمال نیم‌محیط p'],
+['p','از عبارت r_a فاکتور می‌گیریم:'],
+['f2','S = r_a · \\frac{b + c − a}{2}'],
+['p','چون محیط 2p = a + b + c است، پس b + c − a = 2p − 2a = 2(p − a):'],
+['f2','S = r_a · \\frac{2(p − a)}{2} = r_a · (p − a)'],
+['p','با تقسیم طرفین بر (p − a)، فرمول نهایی اثبات می‌شود:'],
+['f','r_a = \\frac{S}{p − a}'],
+['btn','👇 مشاهده و حل مثال عددی کاربردی'],
+['st','مثال عددی:'],
+['ex','در یک مثلث مساحت S = 24 و نیم‌محیط p = 12 است. اگر طول ضلع a = 8 باشد، شعاع دایرهٔ محاطی خارجی نظیر آن چقدر است؟'],
+['f2','r_a = \\frac{S}{p − a} = \\frac{24}{12 − 8} = \\frac{24}{4} = 6'],
+['btn','🎯 حالا نوبت منه'],
+['quiz',{
+ q:'در مثلثی با مساحت S = 30 و نیم‌محیط p = 15، اگر طول ضلع b = 9 باشد، شعاع دایرهٔ محاطی خارجی نظیر رأس B (یعنی r_b) چقدر است؟',
+ o:['r_b = 3','r_b = 4','r_b = 5'],
+ a:2,
+ h:'از رابطهٔ r_b = \\frac{S}{p - b} استفاده کنید: ۳۰ تقسیم بر (۱۵ منهای ۹).',
+ e:'آفرین! r_b = \\frac{30}{15 - 9} = \\frac{30}{6} = 5.'
+}]]},
+
+{k:'fig_all_four',h:'۵. رابطهٔ طلایی معکوس شعاع‌ها',items:[
+['obj','🎯 هدف این بخش: کشف یک ارتباط فوق‌العاده زیبا میان شعاع دایرهٔ محاطی داخلی (r) و شعاع‌های سه دایرهٔ محاطی خارجی (r_a , r_b , r_c).'],
+['d','قضیه معکوس شعاع‌ها: در هر مثلث، مجموع معکوس‌های شعاع‌های سه دایرهٔ محاطی خارجی برابر با معکوس شعاع دایرهٔ محاطی داخلی است:'],
+['f','\\frac{1}{r_a} + \\frac{1}{r_b} + \\frac{1}{r_c} = \\frac{1}{r}'],
+['btn','👇 مشاهدهٔ اثبات ساده و زیبای جبری'],
+['st','اثبات جبری رابطه: '],
+['p','می‌دانیم معکوس هر شعاع خارجی برابر با \\frac{p - a}{S} است. این سه کسر را جمع می‌کنیم:'],
+['f2','\\frac{p - a}{S} + \\frac{p - b}{S} + \\frac{p - c}{S} = \\frac{3p - (a + b + c)}{S}'],
+['p','چون a + b + c همان محیط کامل (2p) است، صورت کسر ساده می‌شود:'],
+['f2','\\frac{3p - 2p}{S} = \\frac{p}{S} = \\frac{1}{r}'],
+['btn','👇 مشاهدهٔ مثال عددی کاربردی'],
+['st','مثال عددی:'],
+['p','اگر شعاع‌های سه دایره محاطی خارجی یک مثلث ۶ و ۱۰ و ۱۵ باشند، شعاع دایره محاطی داخلی (r) را محاسبه می‌کنیم:'],
+['f2','\\frac{1}{r} = \\frac{1}{6} + \\frac{1}{10} + \\frac{1}{15} = \\frac{5 + 3 + 2}{30} \\\\ \\frac{1}{r} = \\frac{10}{30} = \\frac{1}{3} \\implies r = 3'],
+['btn','🎯 حالا نوبت منه'],
+['quiz',{
+ q:'اگر در مثلثی شعاع‌های محاطی خارجی ۱۲ و ۱۲ و ۶ باشند، شعاع دایرهٔ محاطی داخلی (r) چقدر است؟',
+ o:['r = 3','r = 4','r = 2'],
+ a:0,
+ h:'کسرها را با هم جمع کنید: \\frac{1}{12} + \\frac{1}{12} + \\frac{1}{6} = \\frac{2}{12} + \\frac{2}{12} = \\frac{4}{12} = \\frac{1}{3}.',
+ e:'درست است! \\frac{1}{r} = \\frac{1}{3} پس r = 3 به دست می‌آید.'
+}]]},
+
+{h:'۶. جدول جمع‌بندی ۵ دایرهٔ هر مثلث',items:[
+['obj','🎯 خلاصهٔ جامع: هر مثلث در هندسه دارای ۵ دایرهٔ وابسته است؛ ۱ دایره محیطی، ۱ دایره محاطی داخلی و ۳ دایره محاطی خارجی.'],
+['st','جدول مقایسهٔ ۵ دایرهٔ وابسته به هر مثلث'],
+['tbl',`
+<div class="tbl-hint">↔️ جدول قابل اسکرول به طرفین است</div>
+<table class="tbl">
+ <thead>
+  <tr>
+   <th>نوع دایره</th>
+   <th>تعداد در مثلث</th>
+   <th>مرکز دایره</th>
+   <th>فرمول و رابطهٔ شعاع</th>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <td><b>دایرهٔ محیطی (R)</b></td>
+   <td>۱ دایره</td>
+   <td>محل همرسی <b>عمودمنصف‌های اضلاع</b></td>
+   <td><span class="math-tag">OA = OB = OC = R</span></td>
+  </tr>
+  <tr>
+   <td><b>دایرهٔ محاطی داخلی (r)</b></td>
+   <td>۱ دایره</td>
+   <td>محل همرسی <b>نیمسازهای زوایای داخلی</b></td>
+   <td><span class="math-tag">r = <span class="fr"><span class="n">S</span><span class="dn">p</span></span></span></td>
+  </tr>
+  <tr>
+   <td><b>محاطی خارجی نظیر A (<span class="vsub">r<sub>a</sub></span>)</b></td>
+   <td>۱ دایره</td>
+   <td>نیمساز داخلی A و نیمسازهای خارجی B و C</td>
+   <td><span class="math-tag"><span class="vsub">r<sub>a</sub></span> = <span class="fr"><span class="n">S</span><span class="dn">p − a</span></span></span></td>
+  </tr>
+  <tr>
+   <td><b>محاطی خارجی نظیر B (<span class="vsub">r<sub>b</sub></span>)</b></td>
+   <td>۱ دایره</td>
+   <td>نیمساز داخلی B و نیمسازهای خارجی A و C</td>
+   <td><span class="math-tag"><span class="vsub">r<sub>b</sub></span> = <span class="fr"><span class="n">S</span><span class="dn">p − b</span></span></span></td>
+  </tr>
+  <tr>
+   <td><b>محاطی خارجی نظیر C (<span class="vsub">r<sub>c</sub></span>)</b></td>
+   <td>۱ دایره</td>
+   <td>نیمساز داخلی C و نیمسازهای خارجی A و B</td>
+   <td><span class="math-tag"><span class="vsub">r<sub>c</sub></span> = <span class="fr"><span class="n">S</span><span class="dn">p − c</span></span></span></td>
+  </tr>
+ </tbody>
+</table>
+`]]},
+
+{h:'۷. آزمون جامع پایانی',items:[
+['obj','🎯 ارزیابی تسلط: یادگیری خود در مبحث دایره‌های مثلث و محاطی خارجی را بسنجید.'],
+['quiz',{
+ q:'در یک مثلث با اضلاع ۵ و ۶ و ۷، نیم‌محیط p = 9 است. اگر مساحت برابر S = 6√6 باشد، شعاع دایره محاطی خارجی نظیر ضلع ۵ چقدر است؟',
+ o:['\\frac{3√6}{2}','2√6','√6'],
+ a:0,
+ h:'از فرمول r_a = \\frac{S}{p - a} استفاده کنید: 6√6 تقسیم بر (۹ منهای ۵).',
+ e:'آفرین! r_a = \\frac{6√6}{4} = \\frac{3√6}{2}.'
+}],
+['quiz',{
+ q:'کدام گزینه دربارهٔ دایره‌های محاطی خارجی یک مثلث همواره صحیح است؟',
+ o:['شعاع آن‌ها همیشه از شعاع دایره محاطی داخلی کوچک‌تر است','مرکز آن‌ها محل برخورد سه ارتفاع مثلث است','هر مثلث دقیقاً ۳ دایرهٔ محاطی خارجی دارد'],
+ a:2,
+ h:'مثلث چند رأس و چند ضلع برای مماس شدن دارد؟',
+ e:'درست است! نظیر هر رأس و ضلع روبروی آن، یک دایرهٔ محاطی خارجی وجود دارد (مجموعاً ۳ دایره).'
+}],
+['quiz',{
+ q:'اگر در مثلثی p - a = 4 و مساحت S = 20 باشد، شعاع دایرهٔ محاطی خارجی نظیر رأس A چقدر است؟',
+ o:['r_a = 4','r_a = 5','r_a = 10'],
+ a:1,
+ h:'تقسیم مستقیم: r_a = \\frac{S}{p - a} = \\frac{20}{4}.',
+ e:'درست است! r_a = \\frac{20}{4} = 5.'
+}],
+['quiz',{
+ q:'رابطهٔ میان شعاع دایره محاطی داخلی و شعاع‌های محاطی خارجی کدام است؟',
+ o:['r_a + r_b + r_c = r','\\frac{1}{r_a} + \\frac{1}{r_b} + \\frac{1}{r_c} = \\frac{1}{r}','r_a · r_b · r_c = r'],
+ a:1,
+ h:'به قضیهٔ معکوس شعاع‌ها فکر کنید.',
+ e:'آفرین! مجموع معکوس‌های شعاع‌های محاطی خارجی دقیقاً برابر با معکوس شعاع محاطی داخلی (\\frac{1}{r}) است.'
+}],
+['p','آفرین! شما تمامی مفاهیم و فرمول‌های دایره‌های مثلث و دایره‌های محاطی خارجی را با موفقیت یاد گرفتید. 🌟']
+]}
+];
+
+function mark(i){document.querySelectorAll('#dots button').forEach((b,j)=>b.classList.toggle('on',i===j));}
+S.forEach((s,i)=>{const b=el('button');b.textContent=i+1;b.onclick=()=>stage(i);$('#dots').append(b)});
+
+async function stage(i){
+ const tok=++run;const s=S[i],box=$('#txt');box.innerHTML='';mark(i);window.scrollTo(0,0);
+ $('#fig').innerHTML='';F=s.k?mkFig(s.k):null;if(F)$('#fig').append(F.w);
+ syncHeaderHeight();
+ 
+ /* بارش گل در آغاز هر مرحله جدید */
+ if(i > 0) launchShower('flower');
+ 
+ const h=el('h2');box.append(h);await typeWords(h,s.h,tok);
+ const factor = speedProfiles[spdIdx].factor;
+ await sleep(350 * factor);
+ 
+ for(const [k,v,sh,hl] of s.items){
+  if(tok!==run)return;
+  if(k==='tbl'){
+   const tw=el('div','tbl-wrap');tw.innerHTML=v;box.append(tw);ensureVisible(tw, false, true);
+   await sleep(500 * factor);continue;
+  }
+  if(k==='quiz'){await quiz(box,v);continue}
+  if(k==='btn'){await gate(box,v);continue}
+  if(k==='st'){
+   const st=el('div','st');box.append(st);await typeWords(st,v,tok);
+   await sleep(300 * factor);continue;
+  }
+  
+  const e=el('div',k==='obj'?'obj':k);box.append(e);
+  if(F&&(sh!=null||hl))F.cue(sh,hl);
+  if(k==='f'||k==='f2'){
+    await typeFormula(e,v,tok);
+  } else {
+    await typeWords(e,v,tok);
+  }
+  await sleep((k==='p'||k==='ex'||k==='d'||k==='obj'?450:250) * factor);
+ }
+ if(tok!==run)return;
+ const n=el('button','go');n.textContent=i<S.length-1?'گام بعدی ◀':'شروع دوباره';
+ n.onclick=()=>{
+   launchShower('flower');
+   stage((i+1)%S.length);
+ };
+ box.append(n);ensureVisible(n, true, true);
+}
+
+function gate(box,label){
+  return new Promise(r=>{
+    const b=el('button','go');
+    b.innerHTML = renderMath(label);
+    b.onclick=()=>{b.remove();r()};
+    box.append(b);
+    ensureVisible(b, true, true);
+  });
+}
+
+function quiz(box,v){
+  return new Promise(res=>{
+    const q=el('div','quiz'),t=el('b'),row=el('div','opts'),fb=el('div','fb');t.textContent=v.q;
+    v.o.forEach((s,i)=>{
+      const b=el('button','opt');b.dir='auto';b.innerHTML=renderMath(s);
+      b.onclick=()=>{
+        if(i===v.a){
+          b.classList.add('ok');
+          fb.innerHTML='🎉 هورااا! آفرین! '+renderMath(v.e);
+          launchShower('celebrate');
+          playChime();
+          row.querySelectorAll('button').forEach(x=>x.disabled=true);
+          setTimeout(res,1600);
+        } else {
+          b.classList.add('no');fb.innerHTML='دوباره فکر کن. راهنما: '+renderMath(v.h);
+        }
+      };
+      row.append(b);
+    });
+    q.append(t,row,fb);box.append(q);ensureVisible(q, true, true);
+  });
+}
+
+function rightAngle(V,P1,P2,size=8){
+ const v1={x:(P1.x-V.x)/Math.hypot(P1.x-V.x,P1.y-V.y),y:(P1.y-V.y)/Math.hypot(P1.x-V.x,P1.y-V.y)};
+ const v2={x:(P2.x-V.x)/Math.hypot(P2.x-V.x,P2.y-V.y),y:(P2.y-V.y)/Math.hypot(P2.x-V.x,P2.y-V.y)};
+ const a={x:V.x+v1.x*size,y:V.y+v1.y*size};
+ const b={x:a.x+v2.x*size,y:a.y+v2.y*size};
+ const c={x:V.x+v2.x*size,y:V.y+v2.y*size};
+ return `M${a.x} ${a.y} L${b.x} ${b.y} L${c.x} ${c.y}`;
+}
+
+function mkFig(kind){
+ const w=el('div','demo'),svg=document.createElementNS(NS,'svg');
+ svg.setAttribute('viewBox','0 0 460 300');w.append(svg);
+ const vis=new Set(),fresh=new Set();let hl={};
+
+ function draw(){
+  const c=(k,base,isFill)=>base+(hl[k]?' h'+hl[k]:'')+(fresh.has(k)?(isFill?' nf':' nw'):'');
+  const V=k=>vis.has(k);
+  let s='';
+
+  if(kind==='fig_circum_proof'){
+   const A={x:210,y:60}, B={x:130,y:180}, C={x:330,y:180};
+   const O={x:230,y:160}, R=102;
+   const mAB={x:(A.x+B.x)/2, y:(A.y+B.y)/2};
+   const mBC={x:(B.x+C.x)/2, y:(B.y+C.y)/2};
+   const mAC={x:(A.x+C.x)/2, y:(A.y+C.y)/2};
+
+   if(V('drawTri')){
+    s+=`<polygon pathLength="1" class="ln" points="${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}"/>`;
+    s+=`<circle class="pt nf" cx="${A.x}" cy="${A.y}" r="4"/><text class="lb nf" x="${A.x-5}" y="${A.y-9}">A</text>`;
+    s+=`<circle class="pt nf" cx="${B.x}" cy="${B.y}" r="4"/><text class="lb nf" x="${B.x-14}" y="${B.y+6}">B</text>`;
+    s+=`<circle class="pt nf" cx="${C.x}" cy="${C.y}" r="4"/><text class="lb nf" x="${C.x+6}" y="${C.y+6}">C</text>`;
+   }
+   if(V('drawMedAB')){
+    s+=`<line pathLength="1" class="${c('drawMedAB','ln-help')}" x1="${mAB.x-30}" y1="${mAB.y-20}" x2="${O.x}" y2="${O.y}"/>`;
+    s+=`<path class="sq nf" d="${rightAngle(mAB,A,O,8)}"/>`;
+   }
+   if(V('drawMedBC')){
+    s+=`<line pathLength="1" class="${c('drawMedBC','ln-help')}" x1="${mBC.x}" y1="${mBC.y+25}" x2="${O.x}" y2="${O.y-20}"/>`;
+    s+=`<path class="sq nf" d="${rightAngle(mBC,C,O,8)}"/>`;
+   }
+   if(V('pO')){
+    s+=`<circle class="pt-pur nf" cx="${O.x}" cy="${O.y}" r="5"/><text class="lb nf" x="${O.x+8}" y="${O.y+4}">O</text>`;
+   }
+   if(V('drawRadiiO')){
+    s+=`<line pathLength="1" class="ln-blue" style="stroke-dasharray:4 4" x1="${A.x}" y1="${A.y}" x2="${O.x}" y2="${O.y}"/>`;
+    s+=`<line pathLength="1" class="ln-blue" style="stroke-dasharray:4 4" x1="${B.x}" y1="${B.y}" x2="${O.x}" y2="${O.y}"/>`;
+    s+=`<line pathLength="1" class="ln-blue" style="stroke-dasharray:4 4" x1="${C.x}" y1="${C.y}" x2="${O.x}" y2="${O.y}"/>`;
+   }
+   if(V('drawMedAC')){
+    s+=`<line pathLength="1" class="${c('drawMedAC','ln-help')}" x1="${mAC.x+25}" y1="${mAC.y-25}" x2="${O.x}" y2="${O.y}"/>`;
+    s+=`<path class="sq nf" d="${rightAngle(mAC,C,O,8)}"/>`;
+   }
+   if(V('drawCircum')){
+    s+=`<circle pathLength="1" class="${c('drawCircum','cir-blue')}" cx="${O.x}" cy="${O.y}" r="${R}"/>`;
+    s+=`<text class="lb nf" style="fill:var(--blue);font-weight:800" x="${(A.x+O.x)/2-16}" y="${(A.y+O.y)/2}">R</text>`;
+   }
+  }
+  else if(kind==='fig_in_proof'){
+   const A={x:230,y:50}, B={x:140,y:170}, C={x:320,y:170};
+   const I={x:230,y:125}, r=45;
+   const P_AB={x:194,y:98}, P_AC={x:266,y:98}, P_BC={x:230,y:170};
+
+   if(V('drawSubTri')){
+    s+=`<polygon class="tf h1" points="${I.x},${I.y} ${A.x},${A.y} ${B.x},${B.y}"/>`;
+    s+=`<polygon class="tf h2" points="${I.x},${I.y} ${A.x},${A.y} ${C.x},${C.y}"/>`;
+    s+=`<polygon class="tf h3" points="${I.x},${I.y} ${B.x},${B.y} ${C.x},${C.y}"/>`;
+   }
+
+   if(V('drawTri')){
+    s+=`<polygon pathLength="1" class="ln" points="${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}"/>`;
+    s+=`<circle class="pt nf" cx="${A.x}" cy="${A.y}" r="4"/><text class="lb nf" x="${A.x-5}" y="${A.y-9}">A</text>`;
+    s+=`<circle class="pt nf" cx="${B.x}" cy="${B.y}" r="4"/><text class="lb nf" x="${B.x-14}" y="${B.y+6}">B</text>`;
+    s+=`<circle class="pt nf" cx="${C.x}" cy="${C.y}" r="4"/><text class="lb nf" x="${C.x+6}" y="${C.y+6}">C</text>`;
+   }
+
+   if(V('drawBisB')) s+=`<line pathLength="1" class="${c('drawBisB','ln-bisect')}" x1="${B.x}" y1="${B.y}" x2="${I.x}" y2="${I.y}"/>`;
+   if(V('drawBisC')) s+=`<line pathLength="1" class="${c('drawBisC','ln-bisect')}" x1="${C.x}" y1="${C.y}" x2="${I.x}" y2="${I.y}"/>`;
+   if(V('pI')){
+    s+=`<circle class="pt-tan nf" cx="${I.x}" cy="${I.y}" r="4.5"/><text class="lb nf" x="${I.x+9}" y="${I.y+4}">I</text>`;
+   }
+   if(V('drawBisA')){
+    s+=`<line pathLength="1" class="${c('drawBisA','ln-bisect')}" x1="${A.x}" y1="${A.y}" x2="${I.x}" y2="${I.y}"/>`;
+   }
+   if(V('drawRadiiI')){
+    s+=`<line pathLength="1" class="ln-help" x1="${I.x}" y1="${I.y}" x2="${P_BC.x}" y2="${P_BC.y}"/>`;
+    s+=`<line pathLength="1" class="ln-help" x1="${I.x}" y1="${I.y}" x2="${P_AB.x}" y2="${P_AB.y}"/>`;
+    s+=`<line pathLength="1" class="ln-help" x1="${I.x}" y1="${I.y}" x2="${P_AC.x}" y2="${P_AC.y}"/>`;
+    s+=`<path class="sq nf" d="${rightAngle(P_BC,C,I,8)}"/>`;
+    s+=`<path class="sq nf" d="${rightAngle(P_AB,A,I,8)}"/>`;
+    s+=`<path class="sq nf" d="${rightAngle(P_AC,A,I,8)}"/>`;
+    s+=`<text class="lb nf" style="fill:var(--pink);font-weight:800" x="${I.x+7}" y="${I.y+26}">r</text>`;
+   }
+   if(V('drawInCirc')){
+    s+=`<circle pathLength="1" class="${c('drawInCirc','cir-teal')}" cx="${I.x}" cy="${I.y}" r="${r}"/>`;
+   }
+  }
+  else if(kind==='fig_excircle'){
+   // هندسه متقارن دقیق جهت مماس شدن قطعی دایره‌ها
+   const A={x:230,y:110}, B={x:195,y:170}, C={x:265,y:170};
+   const Oa={x:230,y:230}, ra=60;
+   const Ta={x:230,y:170}, Tc={x:178,y:200}, Tb={x:282,y:200};
+
+   /* لایه رنگی تفکیک مساحت‌ها در زیر خطوط */
+   if(V('drawProofTri')){
+    s+=`<polygon class="tf h1 nf" points="${Oa.x},${Oa.y} ${A.x},${A.y} ${B.x},${B.y}"/>`;
+    s+=`<polygon class="tf h2 nf" points="${Oa.x},${Oa.y} ${A.x},${A.y} ${C.x},${C.y}"/>`;
+    s+=`<polygon class="tf h3 nf" points="${Oa.x},${Oa.y} ${B.x},${B.y} ${C.x},${C.y}"/>`;
+    s+=`<line class="ln-help" style="stroke:var(--ink);stroke-dasharray:4 3;" x1="${Oa.x}" y1="${Oa.y}" x2="${A.x}" y2="${A.y}"/>`;
+    s+=`<line class="ln-help" style="stroke:var(--ink);stroke-dasharray:4 3;" x1="${Oa.x}" y1="${Oa.y}" x2="${B.x}" y2="${B.y}"/>`;
+    s+=`<line class="ln-help" style="stroke:var(--ink);stroke-dasharray:4 3;" x1="${Oa.x}" y1="${Oa.y}" x2="${C.x}" y2="${C.y}"/>`;
+   }
+
+   if(V('drawExt')){
+    // امتدادهای دو ضلع AB و AC
+    s+=`<line class="ln-ext" x1="160" y1="230" x2="280" y2="24"/>`;
+    s+=`<line class="ln-ext" x1="300" y1="230" x2="180" y2="24"/>`;
+   }
+
+   if(V('drawBisect')){
+    s+=`<line pathLength="1" class="ln-bisect" x1="${A.x}" y1="${A.y}" x2="${Oa.x}" y2="${Oa.y}"/>`;
+    s+=`<line pathLength="1" class="ln-bisect" x1="${B.x}" y1="${B.y}" x2="${Oa.x}" y2="${Oa.y}"/>`;
+    s+=`<line pathLength="1" class="ln-bisect" x1="${C.x}" y1="${C.y}" x2="${Oa.x}" y2="${Oa.y}"/>`;
+   }
+
+   if(V('pOa')){
+    s+=`<circle class="pt-pur nf" cx="${Oa.x}" cy="${Oa.y}" r="4.5"/><text class="lb nf" x="${Oa.x+8}" y="${Oa.y+5}">O<tspan dy="3" font-size="10">a</tspan></text>`;
+   }
+
+   if(V('drawExCirc')){
+    s+=`<circle pathLength="1" class="${c('drawExCirc','cir-pink')}" cx="${Oa.x}" cy="${Oa.y}" r="${ra}"/>`;
+   }
+
+   if(V('drawAltitudes')){
+    s+=`<line pathLength="1" class="ln-help" style="stroke-width:2.2" x1="${Oa.x}" y1="${Oa.y}" x2="${Ta.x}" y2="${Ta.y}"/>`;
+    s+=`<line pathLength="1" class="ln-help" style="stroke-width:2.2" x1="${Oa.x}" y1="${Oa.y}" x2="${Tc.x}" y2="${Tc.y}"/>`;
+    s+=`<line pathLength="1" class="ln-help" style="stroke-width:2.2" x1="${Oa.x}" y1="${Oa.y}" x2="${Tb.x}" y2="${Tb.y}"/>`;
+    s+=`<path class="sq nf" d="${rightAngle(Ta,C,Oa,8)}"/>`;
+    s+=`<path class="sq nf" d="${rightAngle(Tc,A,Oa,8)}"/>`;
+    s+=`<path class="sq nf" d="${rightAngle(Tb,A,Oa,8)}"/>`;
+    s+=`<text class="lb nf" style="fill:var(--pink);font-weight:800;font-size:14px" x="${Oa.x+8}" y="195">r<tspan dy="3" font-size="10">a</tspan></text>`;
+    s+=`<text class="lb nf" style="fill:var(--pink);font-weight:800;font-size:14px" x="198" y="218">r<tspan dy="3" font-size="10">a</tspan></text>`;
+    s+=`<text class="lb nf" style="fill:var(--pink);font-weight:800;font-size:14px" x="252" y="218">r<tspan dy="3" font-size="10">a</tspan></text>`;
+   }
+
+   // امتدادهای تمام جهات برای مماس شدن دقیق هر ۳ دایره
+   if(V('drawAllExLines')){
+    s+=`<line class="ln-ext" x1="100" y1="170" x2="360" y2="170"/>`;
+    s+=`<line class="ln-ext" x1="160" y1="230" x2="280" y2="24"/>`;
+    s+=`<line class="ln-ext" x1="300" y1="230" x2="180" y2="24"/>`;
+   }
+
+   if(V('drawAllExCircs')){
+    const Oc={x:161,y:110}, rc=60;
+    const Ob={x:299,y:110}, rb=60;
+    s+=`<circle pathLength="1" class="cir-pink" cx="${Oc.x}" cy="${Oc.y}" r="${rc}"/>`;
+    s+=`<text class="lb nf" style="fill:var(--pink);font-weight:bold;text-anchor:middle" x="${Oc.x}" y="${Oc.y+5}">r<tspan dy="3" font-size="10">c</tspan></text>`;
+    s+=`<circle pathLength="1" class="cir-pink" cx="${Ob.x}" cy="${Ob.y}" r="${rb}"/>`;
+    s+=`<text class="lb nf" style="fill:var(--pink);font-weight:bold;text-anchor:middle" x="${Ob.x}" y="${Ob.y+5}">r<tspan dy="3" font-size="10">b</tspan></text>`;
+   }
+
+   if(V('drawTri')){
+    s+=`<polygon pathLength="1" class="ln" points="${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}"/>`;
+    s+=`<circle class="pt nf" cx="${A.x}" cy="${A.y}" r="4"/><text class="lb nf" x="${A.x-5}" y="${A.y-9}">A</text>`;
+    s+=`<circle class="pt nf" cx="${B.x}" cy="${B.y}" r="4"/><text class="lb nf" x="${B.x-15}" y="${B.y-4}">B</text>`;
+    s+=`<circle class="pt nf" cx="${C.x}" cy="${C.y}" r="4"/><text class="lb nf" x="${C.x+7}" y="${C.y-4}">C</text>`;
+    s+=`<text class="lb nf" style="fill:var(--blue);font-weight:800;font-size:14px" x="226" y="162">a</text>`;
+    s+=`<text class="lb nf" style="fill:var(--blue);font-weight:800;font-size:14px" x="200" y="135">c</text>`;
+    s+=`<text class="lb nf" style="fill:var(--blue);font-weight:800;font-size:14px" x="250" y="135">b</text>`;
+   }
+  }
+  else if(kind==='fig_all_four'){
+   // نمایش دائمی هر ۴ دایره مماس برای بخش ۵
+   const A={x:230,y:110}, B={x:195,y:170}, C={x:265,y:170};
+   const I={x:230,y:150}, r=20;
+   const Oa={x:230,y:230}, ra=60;
+   const Oc={x:161,y:110}, rc=60;
+   const Ob={x:299,y:110}, rb=60;
+
+   // خطوط ۶ امتداد کاملاً مماس
+   s+=`<line class="ln-ext" x1="100" y1="170" x2="360" y2="170"/>`;
+   s+=`<line class="ln-ext" x1="160" y1="230" x2="280" y2="24"/>`;
+   s+=`<line class="ln-ext" x1="300" y1="230" x2="180" y2="24"/>`;
+
+   // دایره محاطی داخلی مماس در مرکز
+   s+=`<circle class="cir-teal" cx="${I.x}" cy="${I.y}" r="${r}"/>`;
+   s+=`<text class="lb nf" style="fill:var(--teal);font-size:13px;font-weight:800;text-anchor:middle" x="${I.x}" y="${I.y+5}">r</text>`;
+
+   // ۳ دایرهٔ محاطی خارجی کاملاً مماس
+   s+=`<circle class="cir-pink" cx="${Oa.x}" cy="${Oa.y}" r="${ra}"/>`;
+   s+=`<text class="lb nf" style="fill:var(--pink);font-weight:bold;text-anchor:middle" x="${Oa.x}" y="${Oa.y+5}">r<tspan dy="3" font-size="10">a</tspan></text>`;
+
+   s+=`<circle class="cir-pink" cx="${Oc.x}" cy="${Oc.y}" r="${rc}"/>`;
+   s+=`<text class="lb nf" style="fill:var(--pink);font-weight:bold;text-anchor:middle" x="${Oc.x}" y="${Oc.y+5}">r<tspan dy="3" font-size="10">c</tspan></text>`;
+
+   s+=`<circle class="cir-pink" cx="${Ob.x}" cy="${Ob.y}" r="${rb}"/>`;
+   s+=`<text class="lb nf" style="fill:var(--pink);font-weight:bold;text-anchor:middle" x="${Ob.x}" y="${Ob.y+5}">r<tspan dy="3" font-size="10">b</tspan></text>`;
+
+   // مثلث مرکزی
+   s+=`<polygon class="ln" points="${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}"/>`;
+   s+=`<circle class="pt nf" cx="${A.x}" cy="${A.y}" r="3.5"/><text class="lb nf" x="${A.x-4}" y="${A.y-6}">A</text>`;
+   s+=`<circle class="pt nf" cx="${B.x}" cy="${B.y}" r="3.5"/><text class="lb nf" x="${B.x-12}" y="${B.y+4}">B</text>`;
+   s+=`<circle class="pt nf" cx="${C.x}" cy="${C.y}" r="3.5"/><text class="lb nf" x="${C.x+5}" y="${C.y+4}">C</text>`;
+  }
+
+  svg.innerHTML=s;fresh.clear();
+ }
+
+ const cue=(sh,h)=>{
+  (sh||'').split(' ').filter(Boolean).forEach(k=>{if(!vis.has(k)){vis.add(k);fresh.add(k)}});
+  hl=h||{};draw();
+ };
+
+ draw();
+ return{w,cue};
+}
+
+stage(0);
+</script>
+</body>
+</html>
