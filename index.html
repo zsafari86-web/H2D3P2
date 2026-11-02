@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>دایره‌های محیطی و محاطی مثلث -صفحه ۲۶،۲۵ هندسه ۲</title>
+<title>دایره‌های محیطی و محاطی مثلث - صفحه ۲۶،۲۵ هندسه ۲</title>
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -29,7 +29,6 @@ header{
   gap:10px;flex-wrap:wrap;position:sticky;top:0;z-index:30;box-shadow:0 2px 10px rgba(0,0,0,.15);
 }
 
-/* کادر برندینگ و قرارگیری عکس در هدر */
 .hdr-brand{
   display:flex;
   align-items:center;
@@ -65,14 +64,14 @@ header b{font-size:0.98rem;font-weight:800}
 }
 .dots button.on{background:#fff;color:var(--teal);font-weight:800;transform:scale(1.1)}
 
-.spd-btn, .tool-btn{
+.tool-btn{
   border:0;background:rgba(255,255,255,.24);color:#fff;border-radius:8px;
   padding:4px 10px;font:inherit;cursor:pointer;font-size:.8rem;font-weight:700;
   display:inline-flex;align-items:center;gap:4px;transition:.2s;
 }
-.spd-btn:active, .tool-btn:active{background:rgba(255,255,255,.4)}
+.tool-btn:active{background:rgba(255,255,255,.4)}
 
-main{max-width:780px;margin:0 auto;padding:0 14px 160px}
+main{max-width:780px;margin:0 auto;padding:0 14px 220px}
 #fig{
   position:sticky;top:var(--hdr-h, 75px);z-index:20;padding:6px 0 10px;background:var(--bg);
 }
@@ -239,6 +238,55 @@ text.lb{font:700 14px Vazirmatn,sans-serif;fill:var(--ink)}
 .nf{animation:fi 0.7s}
 @keyframes fi{from{opacity:0}}
 @media (prefers-reduced-motion:reduce){.typing::after,.nw,.nf{animation:none}}
+
+/* ================= نوار کنترل پخش شناور ================= */
+.player-bar{
+  position:fixed;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#0e172a;
+  color:#f8fafc;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:10px 22px;
+  border-radius:32px;
+  box-shadow:0 10px 28px rgba(15,23,42,0.45);
+  z-index:999;
+  border:1px solid rgba(255,255,255,0.12);
+  user-select:none;
+}
+.player-bar button{
+  background:none;
+  border:none;
+  color:#f8fafc;
+  cursor:pointer;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-family:Vazirmatn,sans-serif;
+  font-size:0.86rem;
+  font-weight:700;
+  padding:5px 8px;
+  border-radius:8px;
+  transition:all 0.15s ease;
+  white-space:nowrap;
+}
+.player-bar button:active{
+  transform:scale(0.93);
+  background:rgba(255,255,255,0.14);
+}
+.player-bar .sep{
+  width:1px;
+  height:18px;
+  background:rgba(255,255,255,0.2);
+}
+.p-icon{
+  color:#38bdf8;
+  font-size:1.05rem;
+  line-height:1;
+}
 </style>
 </head>
 <body>
@@ -265,7 +313,6 @@ text.lb{font:700 14px Vazirmatn,sans-serif;fill:var(--ink)}
 
 <header id="header">
   <div class="hdr-brand">
-    <!-- عکس دقیق لوگو -->
     <div class="hdr-logo-box" title="دبیرخانه راهبری کشوری ریاضی متوسطه دوم مستقر در شهر تهران">
       <img src="logo.png" alt="لوگوی دبیرخانه راهبری کشوری ریاضی متوسطه دوم مستقر در شهر تهران">
     </div>
@@ -276,7 +323,6 @@ text.lb{font:700 14px Vazirmatn,sans-serif;fill:var(--ink)}
   <div class="dots" id="dots"></div>
   <div class="hdr-tools">
     <button class="tool-btn" onclick="$('#cheatModal').classList.add('open')">📋 فرمول‌نامه</button>
-    <button class="spd-btn" id="spdBtn">⏱ ۱x (آرام)</button>
     <button class="tool-btn" id="themeBtn" title="تغییر تم">🌓</button>
   </div>
 </header>
@@ -286,21 +332,94 @@ text.lb{font:700 14px Vazirmatn,sans-serif;fill:var(--ink)}
   <div id="txt"></div>
 </main>
 
+<div class="player-bar">
+  <button id="pBtnPause"><span class="p-icon" id="pauseIcon">⏸</span> <span id="pauseTxt">مکث</span></button>
+  <div class="sep"></div>
+  <button id="pBtnSpeed">سرعت <span id="pSpdTxt" style="color:#38bdf8;font-weight:800">۱×</span></button>
+  <div class="sep"></div>
+  <button id="pBtnSkip"><span class="p-icon">⏭</span> رد کردن</button>
+  <div class="sep"></div>
+  <button id="pBtnRestart"><span class="p-icon">↺</span> از اول</button>
+</div>
+
 <script>
 const NS='http://www.w3.org/2000/svg',$=s=>document.querySelector(s);
-const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 const el=(t,c)=>{const e=document.createElement(t);if(c)e.className=c;return e};
-let run=0,F=null;
+let run=0,F=null,currentStepIdx=0;
 
-const speedProfiles = [
-  { label: '⏱ ۱x (آرام)', factor: 1 },
-  { label: '⏱ ۱.۵x (متوسط)', factor: 0.6 },
-  { label: '⏱ ۲x (سریع)', factor: 0.3 }
+/* وضعیت‌های پخش */
+let isPaused = false;
+let pauseResolve = null;
+let skipFast = false;
+
+/* تنظیم سرعت‌های کاملاً آرام و منطقی برای همراهی چشم با شکل و رسم */
+const speedList = [
+  { label: '۱× (آرام)', factor: 1 },
+  { label: '۱.۵× (متوسط)', factor: 0.65 },
+  { label: '۲× (سریع)', factor: 0.35 }
 ];
-let spdIdx = 0;
-$('#spdBtn').onclick = () => {
-  spdIdx = (spdIdx + 1) % speedProfiles.length;
-  $('#spdBtn').textContent = speedProfiles[spdIdx].label;
+let speedIndex = 0;
+
+async function sleep(ms){
+  if(skipFast) return;
+  const factor = speedList[speedIndex].factor;
+  let remaining = ms * factor;
+  while(remaining > 0){
+    if(skipFast) return;
+    if(isPaused){
+      await new Promise(r => { pauseResolve = r; });
+    }
+    const chunk = Math.min(30, remaining);
+    await new Promise(r => setTimeout(r, chunk));
+    remaining -= chunk;
+  }
+}
+
+$('#pBtnPause').onclick = () => {
+  isPaused = !isPaused;
+  if(isPaused){
+    $('#pauseIcon').textContent = '▶';
+    $('#pauseTxt').textContent = 'ادامه';
+  } else {
+    $('#pauseIcon').textContent = '⏸';
+    $('#pauseTxt').textContent = 'مکث';
+    if(pauseResolve){
+      pauseResolve();
+      pauseResolve = null;
+    }
+  }
+};
+
+$('#pBtnSpeed').onclick = () => {
+  speedIndex = (speedIndex + 1) % speedList.length;
+  $('#pSpdTxt').textContent = speedList[speedIndex].label;
+};
+
+$('#pBtnSkip').onclick = () => {
+  skipFast = true;
+  if(isPaused){
+    isPaused = false;
+    $('#pauseIcon').textContent = '⏸';
+    $('#pauseTxt').textContent = 'مکث';
+    if(pauseResolve){
+      pauseResolve();
+      pauseResolve = null;
+    }
+  }
+};
+
+$('#pBtnRestart').onclick = () => {
+  if(isPaused){
+    isPaused = false;
+    $('#pauseIcon').textContent = '⏸';
+    $('#pauseTxt').textContent = 'مکث';
+    if(pauseResolve){
+      pauseResolve();
+      pauseResolve = null;
+    }
+  }
+  skipFast = false;
+  stage(currentStepIdx);
 };
 
 $('#themeBtn').onclick = () => {
@@ -316,7 +435,7 @@ window.addEventListener('resize', syncHeaderHeight);
 window.addEventListener('load', syncHeaderHeight);
 syncHeaderHeight();
 
-/* کانواس بارش گل و جشن */
+/* کانواس بارش گل و ستاره */
 const canvas = $('#confettiCanvas');
 const ctx = canvas.getContext('2d');
 let particles = [];
@@ -393,7 +512,7 @@ function ensureVisible(e, isBtn=false, force=false){
   lastScroll=now;
   if(!e) return;
   const r=e.getBoundingClientRect();
-  const bottomMargin = isBtn ? 140 : 95;
+  const bottomMargin = isBtn ? 160 : 120;
   if(r.bottom > window.innerHeight - bottomMargin){
     window.scrollBy({
       top: r.bottom - window.innerHeight + bottomMargin,
@@ -419,21 +538,33 @@ function renderMath(str){
  return s;
 }
 
+/* سرعت خواندن و همراهی چشم با هندسه (با مکث‌های بسیار دقیق) */
 async function typeWords(e, txt, tok){
+  if(skipFast){
+    e.innerHTML = renderMath(txt);
+    ensureVisible(e, false, true);
+    return;
+  }
   e.classList.add('typing');
   const words = txt.split(' ');
   let accumulated = '';
   for(let i=0; i<words.length; i++){
     if(tok !== run) return;
+    if(skipFast){
+      e.innerHTML = renderMath(txt);
+      break;
+    }
     const w = words[i];
     accumulated += (i === 0 ? '' : ' ') + w;
     e.innerHTML = renderMath(accumulated);
     ensureVisible(e);
     
-    const factor = speedProfiles[spdIdx].factor;
-    let delay = 260 * factor;
-    if(/[.؛!\n]$/.test(w)) delay += 600 * factor;
-    else if(/[,،:]$/.test(w)) delay += 280 * factor;
+    // سرعت پایه: ۲۸۰ میلی‌ثانیه برای هر کلمه تا کاربر بتواند کلمه را بخواند و شکل را ببیند
+    let delay = 280;
+    // مکث بلند در پایان جملات یا دونقطه برای انتقال تمرکز به شکل
+    if(/[.؛!\n:]$/.test(w)) delay += 750;
+    // مکث ملایم روی ویرگول‌ها
+    else if(/[,،]$/.test(w)) delay += 350;
     await sleep(delay);
   }
   e.classList.remove('typing');
@@ -441,11 +572,16 @@ async function typeWords(e, txt, tok){
 }
 
 async function typeFormula(e, str, tok){
+  if(skipFast){
+    e.innerHTML = renderMath(str);
+    ensureVisible(e, false, true);
+    return;
+  }
   e.classList.add('typing');
   e.innerHTML = renderMath(str);
   ensureVisible(e, false, true);
-  const factor = speedProfiles[spdIdx].factor;
-  await sleep(600 * factor);
+  // مکث ۹۰۰ میلی‌ثانیه‌ای بعد از فرمول برای تجزیه و تحلیل ذهنی
+  await sleep(900);
   e.classList.remove('typing');
 }
 
@@ -668,6 +804,18 @@ function mark(i){document.querySelectorAll('#dots button').forEach((b,j)=>b.clas
 S.forEach((s,i)=>{const b=el('button');b.textContent=i+1;b.onclick=()=>stage(i);$('#dots').append(b)});
 
 async function stage(i){
+ currentStepIdx = i;
+ skipFast = false;
+ if(isPaused){
+   isPaused = false;
+   $('#pauseIcon').textContent = '⏸';
+   $('#pauseTxt').textContent = 'مکث';
+   if(pauseResolve){
+     pauseResolve();
+     pauseResolve = null;
+   }
+ }
+
  const tok=++run;const s=S[i],box=$('#txt');box.innerHTML='';mark(i);window.scrollTo(0,0);
  $('#fig').innerHTML='';F=s.k?mkFig(s.k):null;if(F)$('#fig').append(F.w);
  syncHeaderHeight();
@@ -675,20 +823,19 @@ async function stage(i){
  if(i > 0) launchShower('flower');
  
  const h=el('h2');box.append(h);await typeWords(h,s.h,tok);
- const factor = speedProfiles[spdIdx].factor;
- await sleep(350 * factor);
+ await sleep(400);
  
  for(const [k,v,sh,hl] of s.items){
   if(tok!==run)return;
   if(k==='tbl'){
    const tw=el('div','tbl-wrap');tw.innerHTML=v;box.append(tw);ensureVisible(tw, false, true);
-   await sleep(500 * factor);continue;
+   await sleep(600);continue;
   }
   if(k==='quiz'){await quiz(box,v);continue}
   if(k==='btn'){await gate(box,v);continue}
   if(k==='st'){
    const st=el('div','st');box.append(st);await typeWords(st,v,tok);
-   await sleep(300 * factor);continue;
+   await sleep(350);continue;
   }
   
   const e=el('div',k==='obj'?'obj':k);box.append(e);
@@ -698,7 +845,7 @@ async function stage(i){
   } else {
     await typeWords(e,v,tok);
   }
-  await sleep((k==='p'||k==='ex'||k==='d'||k==='obj'?450:250) * factor);
+  await sleep(k==='p'||k==='ex'||k==='d'||k==='obj'?500:300);
  }
  if(tok!==run)return;
  const n=el('button','go');n.textContent=i<S.length-1?'گام بعدی ◀':'شروع دوباره';
@@ -731,7 +878,7 @@ function quiz(box,v){
           launchShower('celebrate');
           playChime();
           row.querySelectorAll('button').forEach(x=>x.disabled=true);
-          setTimeout(res,1600);
+          setTimeout(res,1400);
         } else {
           b.classList.add('no');fb.innerHTML='دوباره فکر کن. راهنما: '+renderMath(v.h);
         }
